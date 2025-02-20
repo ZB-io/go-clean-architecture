@@ -8,6 +8,10 @@ ROOST_METHOD_SIG_HASH=findAllTransferPresenter_Output_7b20311995
 FUNCTION_DEF=func (a findAllTransferPresenter) Output(transfers []domain.Transfer) []usecase.FindAllTransferOutput
 Existing Test Information:
 These test cases are already implemented and not included for test generation scenario:
+File: go-clean-architecture/adapter/presenter/create_account_newcreateaccountpresenter_test.go
+Test Cases:
+    [TestNewCreateAccountPresenter]
+
 File: go-clean-architecture/adapter/presenter/create_account_test.go
 Test Cases:
     [Test_createAccountPresenter_Output]
@@ -34,77 +38,77 @@ Here are the test scenarios for the `findAllTransferPresenter.Output` function:
 Scenario 1: Convert a Single Transfer to Output Format
 
 Details:
-  Description: This test checks if the function correctly converts a single `Transfer` object into the `FindAllTransferOutput` format.
+  Description: This test checks if the function correctly converts a single `domain.Transfer` object into the `usecase.FindAllTransferOutput` format.
 Execution:
-  Arrange: Create a single `Transfer` object with specific ID, account origin ID, account destination ID, amount, and creation time.
-  Act: Call the `Output` method with the single `Transfer` object.
-  Assert: Verify that the returned `FindAllTransferOutput` matches the expected values derived from the `Transfer` object.
+  Arrange: Create a single `domain.Transfer` object with specific ID, account origin ID, account destination ID, amount, and creation time.
+  Act: Call the `Output` method with the single transfer.
+  Assert: Verify that the returned slice contains one `FindAllTransferOutput` object with fields matching the input transfer.
 Validation:
-  Explain the choice of assertion and the logic behind the expected result: The assertion checks that each field in the output matches the corresponding field in the input `Transfer`, ensuring correct data transformation.
-  Discuss the importance of the test: This test ensures that the function can handle the basic case of converting a single transfer, which is fundamental for its correct operation.
+  Explain the choice of assertion and the logic behind the expected result: The assertion checks that the conversion logic correctly maps each field from the `domain.Transfer` to the `FindAllTransferOutput`.
+  Discuss the importance of the test in relation to the application's behavior or business requirements: Ensures that individual transfers are correctly formatted for output, which is crucial for accurate data presentation.
 
 Scenario 2: Convert Multiple Transfers to Output Format
 
 Details:
-  Description: This test verifies that the function can handle and correctly convert multiple `Transfer` objects into the `FindAllTransferOutput` format.
+  Description: This test verifies that the function can handle and correctly convert multiple `domain.Transfer` objects into the output format.
 Execution:
-  Arrange: Create a list of multiple `Transfer` objects with varying IDs, account origin IDs, account destination IDs, amounts, and creation times.
-  Act: Call the `Output` method with the list of `Transfer` objects.
-  Assert: Verify that the returned slice of `FindAllTransferOutput` objects matches the expected values for each `Transfer` in the input list.
+  Arrange: Create a slice of multiple `domain.Transfer` objects with varying IDs, account IDs, amounts, and creation times.
+  Act: Call the `Output` method with the slice of transfers.
+  Assert: Verify that the returned slice contains `FindAllTransferOutput` objects corresponding to each input transfer, with correctly mapped fields.
 Validation:
-  Explain the choice of assertion and the logic behind the expected result: The assertion checks that each output object corresponds to an input `Transfer`, ensuring that the function can handle lists of transfers.
-  Discuss the importance of the test: This test is crucial for validating the function's ability to process multiple transfers, which is a common use case in real-world applications.
+  Explain the choice of assertion and the logic behind the expected result: The assertion ensures that each transfer is independently and correctly converted, maintaining data integrity across multiple entries.
+  Discuss the importance of the test in relation to the application's behavior or business requirements: Validates the function's ability to handle batch processing of transfers, which is essential for scalability and performance.
 
-Scenario 3: Handle Empty Transfer List
+Scenario 3: Handle Empty Transfer Slice
 
 Details:
-  Description: This test checks the function's behavior when given an empty list of `Transfer` objects.
+  Description: This test checks the function's behavior when given an empty slice of transfers.
 Execution:
-  Arrange: Create an empty list of `Transfer` objects.
-  Act: Call the `Output` method with the empty list.
+  Arrange: Create an empty slice of `domain.Transfer`.
+  Act: Call the `Output` method with the empty slice.
   Assert: Verify that the returned slice is also empty.
 Validation:
-  Explain the choice of assertion and the logic behind the expected result: The assertion checks that the function returns an empty slice, which is the correct behavior when there are no transfers to process.
-  Discuss the importance of the test: This test ensures that the function gracefully handles edge cases without errors, maintaining robustness.
+  Explain the choice of assertion and the logic behind the expected result: The assertion confirms that the function gracefully handles empty input without errors, returning an empty output.
+  Discuss the importance of the test in relation to the application's behavior or business requirements: Ensures robustness by verifying that the function can handle edge cases without crashing or producing incorrect results.
 
-Scenario 4: Handle Transfers with Zero Amount
-
-Details:
-  Description: This test verifies the function's handling of `Transfer` objects where the amount is zero.
-Execution:
-  Arrange: Create a `Transfer` object with an amount of zero.
-  Act: Call the `Output` method with the `Transfer` object.
-  Assert: Verify that the `Amount` field in the `FindAllTransferOutput` is correctly set to zero.
-Validation:
-  Explain the choice of assertion and the logic behind the expected result: The assertion ensures that zero values are correctly represented in the output, which is important for accurate financial reporting.
-  Discuss the importance of the test: Handling zero amounts correctly is critical in financial applications to prevent misrepresentation of data.
-
-Scenario 5: Handle Transfers with Large Amounts
+Scenario 4: Verify Correct Time Formatting
 
 Details:
-  Description: This test checks the function's ability to handle `Transfer` objects with very large amounts.
+  Description: This test ensures that the `CreatedAt` field in the output is correctly formatted according to the RFC3339 standard.
 Execution:
-  Arrange: Create a `Transfer` object with a large amount value.
-  Act: Call the `Output` method with the `Transfer` object.
-  Assert: Verify that the `Amount` field in the `FindAllTransferOutput` correctly reflects the large amount.
+  Arrange: Create a `domain.Transfer` object with a specific creation time.
+  Act: Call the `Output` method with the transfer.
+  Assert: Verify that the `CreatedAt` field in the output matches the expected RFC3339 formatted string.
 Validation:
-  Explain the choice of assertion and the logic behind the expected result: The assertion ensures that large values are accurately converted, preventing overflow or precision errors.
-  Discuss the importance of the test: This test is important for ensuring that the application can handle high-value transactions without data loss or errors.
+  Explain the choice of assertion and the logic behind the expected result: The assertion checks that the time formatting logic is correctly applied, ensuring consistent and expected date-time representation.
+  Discuss the importance of the test in relation to the application's behavior or business requirements: Accurate time formatting is crucial for logging, auditing, and user interface consistency.
 
-Scenario 6: Handle Transfers with Identical Origin and Destination Accounts
+Scenario 5: Validate Amount Conversion to Float64
 
 Details:
-  Description: This test verifies the function's handling of `Transfer` objects where the origin and destination account IDs are the same.
+  Description: This test checks that the `amount` field in the `domain.Transfer` is correctly converted from `Money` to `float64` in the output.
 Execution:
-  Arrange: Create a `Transfer` object with identical account origin and destination IDs.
-  Act: Call the `Output` method with the `Transfer` object.
-  Assert: Verify that the output correctly reflects the identical account IDs.
+  Arrange: Create a `domain.Transfer` object with a specific amount.
+  Act: Call the `Output` method with the transfer.
+  Assert: Verify that the `Amount` field in the output is the expected float64 value.
 Validation:
-  Explain the choice of assertion and the logic behind the expected result: The assertion checks that the function does not alter account IDs, even if they are the same, ensuring data integrity.
-  Discuss the importance of the test: This test ensures that the function can handle edge cases where transfers occur within the same account, which may be relevant for certain business rules.
+  Explain the choice of assertion and the logic behind the expected result: The assertion ensures that the conversion from `Money` to `float64` is accurate, preserving the monetary value.
+  Discuss the importance of the test in relation to the application's behavior or business requirements: Correct monetary conversion is essential for financial accuracy and reporting.
+
+Scenario 6: Handle Transfers with Identical IDs
+
+Details:
+  Description: This test checks the function's behavior when processing transfers with identical IDs.
+Execution:
+  Arrange: Create a slice of `domain.Transfer` objects with the same ID but different other fields.
+  Act: Call the `Output` method with the slice.
+  Assert: Verify that each output object is distinct and correctly reflects the input data, despite identical IDs.
+Validation:
+  Explain the choice of assertion and the logic behind the expected result: The assertion ensures that the function does not mistakenly merge or confuse transfers with the same ID.
+  Discuss the importance of the test in relation to the application's behavior or business requirements: Ensures data integrity and uniqueness, which is critical for accurate transaction tracking and auditing.
 ```
 
-These scenarios cover a range of normal and edge cases, ensuring comprehensive testing of the `findAllTransferPresenter.Output` function.
+These scenarios cover a range of normal operations, edge cases, and potential issues that the `findAllTransferPresenter.Output` function might encounter.
 */
 
 // ********RoostGPT********
@@ -125,10 +129,10 @@ func (a findAllTransferPresenter) Output(transfers []domain.Transfer) []usecase.
 	var o = make([]usecase.FindAllTransferOutput, 0)
 	for _, transfer := range transfers {
 		o = append(o, usecase.FindAllTransferOutput{
-			ID:                   transfer.ID().String(),
-			AccountOriginID:      transfer.AccountOriginID().String(),
-			AccountDestinationID: transfer.AccountDestinationID().String(),
-			Amount:               transfer.Amount().Float64(),
+			ID:                   string(transfer.ID()),
+			AccountOriginID:      string(transfer.AccountOriginID()),
+			AccountDestinationID: string(transfer.AccountDestinationID()),
+			Amount:               float64(transfer.Amount()) / 100,
 			CreatedAt:            transfer.CreatedAt().Format(time.RFC3339),
 		})
 	}
@@ -148,16 +152,16 @@ func Test_findAllTransferPresenter_Output(t *testing.T) {
 			name: "Convert a Single Transfer to Output Format",
 			args: args{
 				transfers: []domain.Transfer{
-					domain.NewTransfer("3c096a40-ccba-4b58-93ed-57379ab04680", "3c096a40-ccba-4b58-93ed-57379ab04681", "3c096a40-ccba-4b58-93ed-57379ab04682", 1000, time.Time{}),
+					domain.NewTransfer("transfer-1", "account-origin-1", "account-destination-1", 1000, time.Date(2023, 10, 1, 12, 0, 0, 0, time.UTC)),
 				},
 			},
 			want: []usecase.FindAllTransferOutput{
 				{
-					ID:                   "3c096a40-ccba-4b58-93ed-57379ab04680",
-					AccountOriginID:      "3c096a40-ccba-4b58-93ed-57379ab04681",
-					AccountDestinationID: "3c096a40-ccba-4b58-93ed-57379ab04682",
-					Amount:               10,
-					CreatedAt:            "0001-01-01T00:00:00Z",
+					ID:                   "transfer-1",
+					AccountOriginID:      "account-origin-1",
+					AccountDestinationID: "account-destination-1",
+					Amount:               10.00,
+					CreatedAt:            "2023-10-01T12:00:00Z",
 				},
 			},
 		},
@@ -165,86 +169,95 @@ func Test_findAllTransferPresenter_Output(t *testing.T) {
 			name: "Convert Multiple Transfers to Output Format",
 			args: args{
 				transfers: []domain.Transfer{
-					domain.NewTransfer("3c096a40-ccba-4b58-93ed-57379ab04680", "3c096a40-ccba-4b58-93ed-57379ab04681", "3c096a40-ccba-4b58-93ed-57379ab04682", 1000, time.Time{}),
-					domain.NewTransfer("3c096a40-ccba-4b58-93ed-57379ab04683", "3c096a40-ccba-4b58-93ed-57379ab04684", "3c096a40-ccba-4b58-93ed-57379ab04685", 2000, time.Time{}),
+					domain.NewTransfer("transfer-1", "account-origin-1", "account-destination-1", 1000, time.Date(2023, 10, 1, 12, 0, 0, 0, time.UTC)),
+					domain.NewTransfer("transfer-2", "account-origin-2", "account-destination-2", 2000, time.Date(2023, 10, 2, 13, 0, 0, 0, time.UTC)),
 				},
 			},
 			want: []usecase.FindAllTransferOutput{
 				{
-					ID:                   "3c096a40-ccba-4b58-93ed-57379ab04680",
-					AccountOriginID:      "3c096a40-ccba-4b58-93ed-57379ab04681",
-					AccountDestinationID: "3c096a40-ccba-4b58-93ed-57379ab04682",
-					Amount:               10,
-					CreatedAt:            "0001-01-01T00:00:00Z",
+					ID:                   "transfer-1",
+					AccountOriginID:      "account-origin-1",
+					AccountDestinationID: "account-destination-1",
+					Amount:               10.00,
+					CreatedAt:            "2023-10-01T12:00:00Z",
 				},
 				{
-					ID:                   "3c096a40-ccba-4b58-93ed-57379ab04683",
-					AccountOriginID:      "3c096a40-ccba-4b58-93ed-57379ab04684",
-					AccountDestinationID: "3c096a40-ccba-4b58-93ed-57379ab04685",
-					Amount:               20,
-					CreatedAt:            "0001-01-01T00:00:00Z",
+					ID:                   "transfer-2",
+					AccountOriginID:      "account-origin-2",
+					AccountDestinationID: "account-destination-2",
+					Amount:               20.00,
+					CreatedAt:            "2023-10-02T13:00:00Z",
 				},
 			},
 		},
 		{
-			name: "Handle Empty Transfer List",
+			name: "Handle Empty Transfer Slice",
 			args: args{
 				transfers: []domain.Transfer{},
 			},
 			want: []usecase.FindAllTransferOutput{},
 		},
 		{
-			name: "Handle Transfers with Zero Amount",
+			name: "Verify Correct Time Formatting",
 			args: args{
 				transfers: []domain.Transfer{
-					domain.NewTransfer("3c096a40-ccba-4b58-93ed-57379ab04680", "3c096a40-ccba-4b58-93ed-57379ab04681", "3c096a40-ccba-4b58-93ed-57379ab04682", 0, time.Time{}),
+					domain.NewTransfer("transfer-1", "account-origin-1", "account-destination-1", 1000, time.Date(2023, 10, 1, 12, 0, 0, 0, time.UTC)),
 				},
 			},
 			want: []usecase.FindAllTransferOutput{
 				{
-					ID:                   "3c096a40-ccba-4b58-93ed-57379ab04680",
-					AccountOriginID:      "3c096a40-ccba-4b58-93ed-57379ab04681",
-					AccountDestinationID: "3c096a40-ccba-4b58-93ed-57379ab04682",
-					Amount:               0,
-					CreatedAt:            "0001-01-01T00:00:00Z",
+					ID:                   "transfer-1",
+					AccountOriginID:      "account-origin-1",
+					AccountDestinationID: "account-destination-1",
+					Amount:               10.00,
+					CreatedAt:            "2023-10-01T12:00:00Z",
 				},
 			},
 		},
 		{
-			name: "Handle Transfers with Large Amounts",
+			name: "Validate Amount Conversion to Float64",
 			args: args{
 				transfers: []domain.Transfer{
-					domain.NewTransfer("3c096a40-ccba-4b58-93ed-57379ab04680", "3c096a40-ccba-4b58-93ed-57379ab04681", "3c096a40-ccba-4b58-93ed-57379ab04682", 1000000000, time.Time{}),
+					domain.NewTransfer("transfer-1", "account-origin-1", "account-destination-1", 1500, time.Date(2023, 10, 1, 12, 0, 0, 0, time.UTC)),
 				},
 			},
 			want: []usecase.FindAllTransferOutput{
 				{
-					ID:                   "3c096a40-ccba-4b58-93ed-57379ab04680",
-					AccountOriginID:      "3c096a40-ccba-4b58-93ed-57379ab04681",
-					AccountDestinationID: "3c096a40-ccba-4b58-93ed-57379ab04682",
-					Amount:               10000000,
-					CreatedAt:            "0001-01-01T00:00:00Z",
+					ID:                   "transfer-1",
+					AccountOriginID:      "account-origin-1",
+					AccountDestinationID: "account-destination-1",
+					Amount:               15.00,
+					CreatedAt:            "2023-10-01T12:00:00Z",
 				},
 			},
 		},
 		{
-			name: "Handle Transfers with Identical Origin and Destination Accounts",
+			name: "Handle Transfers with Identical IDs",
 			args: args{
 				transfers: []domain.Transfer{
-					domain.NewTransfer("3c096a40-ccba-4b58-93ed-57379ab04680", "3c096a40-ccba-4b58-93ed-57379ab04681", "3c096a40-ccba-4b58-93ed-57379ab04681", 1000, time.Time{}),
+					domain.NewTransfer("transfer-1", "account-origin-1", "account-destination-1", 1000, time.Date(2023, 10, 1, 12, 0, 0, 0, time.UTC)),
+					domain.NewTransfer("transfer-1", "account-origin-2", "account-destination-2", 2000, time.Date(2023, 10, 2, 13, 0, 0, 0, time.UTC)),
 				},
 			},
 			want: []usecase.FindAllTransferOutput{
 				{
-					ID:                   "3c096a40-ccba-4b58-93ed-57379ab04680",
-					AccountOriginID:      "3c096a40-ccba-4b58-93ed-57379ab04681",
-					AccountDestinationID: "3c096a40-ccba-4b58-93ed-57379ab04681",
-					Amount:               10,
-					CreatedAt:            "0001-01-01T00:00:00Z",
+					ID:                   "transfer-1",
+					AccountOriginID:      "account-origin-1",
+					AccountDestinationID: "account-destination-1",
+					Amount:               10.00,
+					CreatedAt:            "2023-10-01T12:00:00Z",
+				},
+				{
+					ID:                   "transfer-1",
+					AccountOriginID:      "account-origin-2",
+					AccountDestinationID: "account-destination-2",
+					Amount:               20.00,
+					CreatedAt:            "2023-10-02T13:00:00Z",
 				},
 			},
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			pre := findAllTransferPresenter{}

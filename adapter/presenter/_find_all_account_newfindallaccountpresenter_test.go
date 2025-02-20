@@ -79,6 +79,7 @@ Validation:
 package presenter
 
 import (
+	"strconv"
 	"testing"
 	"time"
 
@@ -86,68 +87,69 @@ import (
 	"github.com/gsabadini/go-clean-architecture/usecase"
 )
 
-// Test for Scenario 1: Verify Creation of FindAllAccountPresenter Instance
-func TestNewFindAllAccountPresenter(t *testing.T) {
-	t.Run("Verify Creation of FindAllAccountPresenter Instance", func(t *testing.T) {
-		presenter := NewFindAllAccountPresenter()
-		if _, ok := presenter.(findAllAccountPresenter); !ok {
-			t.Errorf("Expected type findAllAccountPresenter, but got %T", presenter)
-		}
-	})
-}
-
-// Test for Scenario 2: Ensure FindAllAccountPresenter Implements Interface
-func TestFindAllAccountPresenterImplementsInterface(t *testing.T) {
-	t.Run("Ensure FindAllAccountPresenter Implements Interface", func(t *testing.T) {
-		var presenter usecase.FindAllAccountPresenter = NewFindAllAccountPresenter()
-		if _, ok := presenter.(findAllAccountPresenter); !ok {
-			t.Errorf("Expected findAllAccountPresenter to implement FindAllAccountPresenter interface")
-		}
-	})
-}
-
-// Test for Scenario 3: Test Default Behavior of FindAllAccountPresenter Output Method
-func TestFindAllAccountPresenterOutputWithEmptyInput(t *testing.T) {
-	t.Run("Test Default Behavior of FindAllAccountPresenter Output Method", func(t *testing.T) {
-		presenter := NewFindAllAccountPresenter()
-		output := presenter.Output([]domain.Account{})
-		if len(output) != 0 {
-			t.Errorf("Expected empty output, but got %v", output)
-		}
-	})
-}
-
-// Test for Scenario 4: Test FindAllAccountPresenter with Nil Input
-func TestFindAllAccountPresenterOutputWithNilInput(t *testing.T) {
-	t.Run("Test FindAllAccountPresenter with Nil Input", func(t *testing.T) {
-		presenter := NewFindAllAccountPresenter()
-		var accounts []domain.Account
-		output := presenter.Output(accounts)
-		if len(output) != 0 {
-			t.Errorf("Expected empty output, but got %v", output)
-		}
-	})
-}
-
-// Test for Scenario 5: Test FindAllAccountPresenter with Large Input
-func TestFindAllAccountPresenterOutputWithLargeInput(t *testing.T) {
-	t.Run("Test FindAllAccountPresenter with Large Input", func(t *testing.T) {
-		presenter := NewFindAllAccountPresenter()
-		largeAccounts := make([]domain.Account, 1000)
-		for i := 0; i < 1000; i++ {
-			largeAccounts[i] = domain.NewAccount("id", "name", "cpf", domain.Money(i), time.Time{})
-		}
-		output := presenter.Output(largeAccounts)
-		if len(output) != len(largeAccounts) {
-			t.Errorf("Expected output length %d, but got %d", len(largeAccounts), len(output))
-		}
-	})
-}
-
-// Assuming the implementation of findAllAccountPresenter and its methods
 type findAllAccountPresenter struct{}
 
 func (f findAllAccountPresenter) Output(accounts []domain.Account) []usecase.FindAllAccountOutput {
-	// Mock implementation for testing purposes
-	return make([]usecase.FindAllAccountOutput, len(accounts))
+	var outputs []usecase.FindAllAccountOutput
+	for _, account := range accounts {
+		outputs = append(outputs, usecase.FindAllAccountOutput{
+			ID:   account.ID.String(),
+			Name: account.Name,
+			CPF:  account.CPF,
+		})
+	}
+	return outputs
+}
+
+func NewFindAllAccountPresenter() usecase.FindAllAccountPresenter {
+	return findAllAccountPresenter{}
+}
+
+func TestNewFindAllAccountPresenterInstance(t *testing.T) {
+	presenter := NewFindAllAccountPresenter()
+	if _, ok := presenter.(findAllAccountPresenter); !ok {
+		t.Errorf("Expected type findAllAccountPresenter, but got %T", presenter)
+	}
+}
+
+func TestFindAllAccountPresenterImplementsInterface(t *testing.T) {
+	var presenter usecase.FindAllAccountPresenter = NewFindAllAccountPresenter()
+	if _, ok := presenter.(usecase.FindAllAccountPresenter); !ok {
+		t.Errorf("Expected type to implement FindAllAccountPresenter interface, but it does not")
+	}
+}
+
+func TestFindAllAccountPresenterOutputWithEmptyInput(t *testing.T) {
+	presenter := NewFindAllAccountPresenter()
+	accounts := []domain.Account{}
+	output := presenter.Output(accounts)
+	if len(output) != 0 {
+		t.Errorf("Expected empty output, but got %v", output)
+	}
+}
+
+func TestFindAllAccountPresenterOutputWithNilInput(t *testing.T) {
+	presenter := NewFindAllAccountPresenter()
+	var accounts []domain.Account = nil
+	output := presenter.Output(accounts)
+	if len(output) != 0 {
+		t.Errorf("Expected empty output for nil input, but got %v", output)
+	}
+}
+
+func TestFindAllAccountPresenterOutputWithLargeInput(t *testing.T) {
+	presenter := NewFindAllAccountPresenter()
+	accounts := make([]domain.Account, 1000)
+	for i := 0; i < 1000; i++ {
+		accounts[i] = domain.NewAccount(domain.AccountID("id"+strconv.Itoa(i)), "Name"+strconv.Itoa(i), "CPF"+strconv.Itoa(i), domain.Money(i), time.Now())
+	}
+	output := presenter.Output(accounts)
+	if len(output) != 1000 {
+		t.Errorf("Expected output length of 1000, but got %d", len(output))
+	}
+	for i, accountOutput := range output {
+		if accountOutput.ID != "id"+strconv.Itoa(i) || accountOutput.Name != "Name"+strconv.Itoa(i) || accountOutput.CPF != "CPF"+strconv.Itoa(i) {
+			t.Errorf("Mismatch in account output at index %d: got %v", i, accountOutput)
+		}
+	}
 }

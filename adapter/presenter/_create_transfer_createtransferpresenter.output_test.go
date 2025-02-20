@@ -8,6 +8,10 @@ ROOST_METHOD_SIG_HASH=createTransferPresenter_Output_639eeea89e
 FUNCTION_DEF=func (c createTransferPresenter) Output(transfer domain.Transfer) usecase.CreateTransferOutput
 Existing Test Information:
 These test cases are already implemented and not included for test generation scenario:
+File: go-clean-architecture/adapter/presenter/create_account_newcreateaccountpresenter_test.go
+Test Cases:
+    [TestNewCreateAccountPresenter]
+
 File: go-clean-architecture/adapter/presenter/create_account_test.go
 Test Cases:
     [Test_createAccountPresenter_Output]
@@ -28,68 +32,66 @@ File: go-clean-architecture/adapter/presenter/find_all_transfer_test.go
 Test Cases:
     [Test_findAllTransferPresenter_Output]
 
-Here are the test scenarios for the `createTransferPresenter.Output` function:
-
 ```
-Scenario 1: Successful Transfer Output Conversion
+Scenario 1: Verify Correct Conversion of Domain.Transfer to CreateTransferOutput
 
 Details:
-  Description: This test checks the normal operation of converting a valid `domain.Transfer` object into a `usecase.CreateTransferOutput` structure. It ensures that all fields are correctly mapped and formatted.
+  Description: This test checks if the `Output` method correctly converts a `domain.Transfer` object into a `usecase.CreateTransferOutput` object, ensuring all fields are accurately mapped and formatted.
 Execution:
-  Arrange: Create a `domain.Transfer` object with valid IDs, amount, and creation time.
+  Arrange: Create a `domain.Transfer` object with specific values for ID, AccountOriginID, AccountDestinationID, Amount, and CreatedAt.
   Act: Call the `Output` method of `createTransferPresenter` with the created `domain.Transfer` object.
-  Assert: Verify that the returned `usecase.CreateTransferOutput` has the expected ID, AccountOriginID, AccountDestinationID, Amount, and CreatedAt values.
+  Assert: Verify that the returned `usecase.CreateTransferOutput` object has the expected values for ID, AccountOriginID, AccountDestinationID, Amount, and CreatedAt.
 Validation:
-  Explain the choice of assertion and the logic behind the expected result: The assertion checks that each field in the output matches the corresponding field in the input transfer object, ensuring correct data transformation.
-  Discuss the importance of the test in relation to the application's behavior or business requirements: This test is crucial for verifying that the presenter correctly formats transfer data for use in the application's output layer.
+  Explain the choice of assertion and the logic behind the expected result: The assertion checks that each field in the output matches the expected string or float representation of the corresponding field in the input `domain.Transfer`. This ensures the method correctly formats and maps data.
+  Discuss the importance of the test in relation to the application's behavior or business requirements: Accurate conversion is crucial for data integrity and ensuring that the application correctly communicates transfer details to other system components or external clients.
 
-Scenario 2: Transfer Output with Zero Amount
+Scenario 2: Handle Zero Amount in Transfer
 
 Details:
-  Description: This test checks the behavior of the function when the transfer amount is zero, ensuring that the amount is correctly converted to a float64 representation.
+  Description: This test ensures that the `Output` method can handle a `domain.Transfer` with an amount of zero, converting it correctly to a `usecase.CreateTransferOutput`.
 Execution:
-  Arrange: Create a `domain.Transfer` object with a zero amount.
-  Act: Call the `Output` method of `createTransferPresenter` with the created `domain.Transfer` object.
-  Assert: Verify that the returned `usecase.CreateTransferOutput` has an Amount of 0.0.
+  Arrange: Create a `domain.Transfer` object with an amount of zero.
+  Act: Call the `Output` method with this transfer object.
+  Assert: Verify that the `Amount` field in the resulting `usecase.CreateTransferOutput` is `0.0`.
 Validation:
-  Explain the choice of assertion and the logic behind the expected result: The assertion ensures that the zero amount is correctly represented as 0.0 in the output, which is important for accurate financial reporting.
-  Discuss the importance of the test in relation to the application's behavior or business requirements: This test ensures that edge cases involving zero amounts are handled correctly, maintaining data integrity.
+  Explain the choice of assertion and the logic behind the expected result: The assertion checks that the zero amount is correctly represented as `0.0` in the output, ensuring that the method handles edge cases of zero values.
+  Discuss the importance of the test in relation to the application's behavior or business requirements: Handling zero amounts correctly is important for financial applications to prevent errors in calculations or reporting.
 
-Scenario 3: Transfer Output with Future CreatedAt Date
+Scenario 3: Validate Handling of Future CreatedAt Date
 
 Details:
-  Description: This test checks the behavior of the function when the transfer's CreatedAt date is set in the future, ensuring that the date is correctly formatted.
+  Description: This test checks if the `Output` method can handle a `domain.Transfer` with a `CreatedAt` date set in the future, ensuring it is formatted correctly.
 Execution:
-  Arrange: Create a `domain.Transfer` object with a CreatedAt date set to a future time.
-  Act: Call the `Output` method of `createTransferPresenter` with the created `domain.Transfer` object.
-  Assert: Verify that the returned `usecase.CreateTransferOutput` has a CreatedAt value that matches the future date in RFC3339 format.
+  Arrange: Create a `domain.Transfer` object with a `CreatedAt` date set to a future date.
+  Act: Call the `Output` method with this transfer object.
+  Assert: Verify that the `CreatedAt` field in the resulting `usecase.CreateTransferOutput` is correctly formatted as a string in RFC3339 format.
 Validation:
-  Explain the choice of assertion and the logic behind the expected result: The assertion checks that the future date is correctly formatted, ensuring that the application can handle future-dated transactions.
-  Discuss the importance of the test in relation to the application's behavior or business requirements: This test ensures that the application can process and display future transactions, which may be relevant for scheduling or forecasting features.
+  Explain the choice of assertion and the logic behind the expected result: The assertion ensures that future dates are formatted correctly, maintaining consistency in date representation.
+  Discuss the importance of the test in relation to the application's behavior or business requirements: Proper date handling is crucial for scheduling, auditing, and compliance purposes in applications dealing with financial transactions.
 
-Scenario 4: Transfer Output with Invalid IDs
+Scenario 4: Test with Minimum and Maximum Transfer Amounts
 
 Details:
-  Description: This test checks the behavior of the function when the transfer contains invalid or malformed IDs, ensuring that the IDs are still correctly converted to strings.
+  Description: This test checks the `Output` method's ability to handle the smallest and largest possible transfer amounts, ensuring accurate conversion and formatting.
 Execution:
-  Arrange: Create a `domain.Transfer` object with invalid or malformed AccountOriginID and AccountDestinationID.
-  Act: Call the `Output` method of `createTransferPresenter` with the created `domain.Transfer` object.
-  Assert: Verify that the returned `usecase.CreateTransferOutput` has ID fields that match the input, despite being invalid.
+  Arrange: Create two `domain.Transfer` objects, one with the minimum possible amount and another with the maximum possible amount.
+  Act: Call the `Output` method with each transfer object.
+  Assert: Verify that the `Amount` field in the resulting `usecase.CreateTransferOutput` is correctly converted and formatted for both cases.
 Validation:
-  Explain the choice of assertion and the logic behind the expected result: The assertion ensures that even invalid IDs are correctly converted to strings, maintaining consistency in data representation.
-  Discuss the importance of the test in relation to the application's behavior or business requirements: This test ensures that the application can handle and display invalid data gracefully, which is important for debugging and error handling.
+  Explain the choice of assertion and the logic behind the expected result: The assertion ensures that extreme values are handled without overflow or underflow, maintaining data integrity.
+  Discuss the importance of the test in relation to the application's behavior or business requirements: Handling extreme values is essential for robustness, preventing potential errors or vulnerabilities in financial calculations.
 
-Scenario 5: Transfer Output with Maximum Amount
+Scenario 5: Ensure Correct Handling of Invalid Transfer IDs
 
 Details:
-  Description: This test checks the behavior of the function when the transfer amount is set to the maximum possible value, ensuring that it is correctly converted and represented.
+  Description: This test verifies that the `Output` method can handle a `domain.Transfer` with an invalid ID format, ensuring it does not crash or produce incorrect output.
 Execution:
-  Arrange: Create a `domain.Transfer` object with the maximum possible amount for the Money type.
-  Act: Call the `Output` method of `createTransferPresenter` with the created `domain.Transfer` object.
-  Assert: Verify that the returned `usecase.CreateTransferOutput` has an Amount that matches the maximum value.
+  Arrange: Create a `domain.Transfer` object with an invalid ID format.
+  Act: Call the `Output` method with this transfer object.
+  Assert: Verify that the `ID` field in the resulting `usecase.CreateTransferOutput` is a string representation of the invalid ID, without causing errors.
 Validation:
-  Explain the choice of assertion and the logic behind the expected result: The assertion ensures that large amounts are correctly converted and represented, which is important for financial accuracy.
-  Discuss the importance of the test in relation to the application's behavior or business requirements: This test ensures that the application can handle large transactions without overflow or data loss, which is critical for financial applications.
+  Explain the choice of assertion and the logic behind the expected result: The assertion checks that the method handles invalid IDs gracefully, converting them to strings without error.
+  Discuss the importance of the test in relation to the application's behavior or business requirements: Ensuring robustness against invalid input is crucial for application stability and security, preventing potential crashes or data corruption.
 ```
 */
 
@@ -109,11 +111,11 @@ type createTransferPresenter struct{}
 
 func (c createTransferPresenter) Output(transfer domain.Transfer) usecase.CreateTransferOutput {
 	return usecase.CreateTransferOutput{
-		ID:                   transfer.ID().String(),
-		AccountOriginID:      transfer.AccountOriginID().String(),
-		AccountDestinationID: transfer.AccountDestinationID().String(),
-		Amount:               transfer.Amount().Float64(),
-		CreatedAt:            transfer.CreatedAt().Format(time.RFC3339),
+		ID:                   string(transfer.ID),
+		AccountOriginID:      string(transfer.accountOriginID),
+		AccountDestinationID: string(transfer.accountDestinationID),
+		Amount:               float64(transfer.amount) / 100,
+		CreatedAt:            transfer.createdAt.Format(time.RFC3339),
 	}
 }
 
@@ -127,14 +129,14 @@ func TestcreateTransferPresenterOutput(t *testing.T) {
 		want usecase.CreateTransferOutput
 	}{
 		{
-			name: "Successful Transfer Output Conversion",
+			name: "Verify Correct Conversion of Domain.Transfer to CreateTransferOutput",
 			args: args{
 				transfer: domain.Transfer{
-					id:                   domain.TransferID("3c096a40-ccba-4b58-93ed-57379ab04680"),
-					accountOriginID:      domain.AccountID("3c096a40-ccba-4b58-93ed-57379ab04681"),
-					accountDestinationID: domain.AccountID("3c096a40-ccba-4b58-93ed-57379ab04682"),
-					amount:               domain.Money(1000),
-					createdAt:            time.Date(2023, 10, 1, 0, 0, 0, 0, time.UTC),
+					ID:                   "3c096a40-ccba-4b58-93ed-57379ab04680",
+					accountOriginID:      "3c096a40-ccba-4b58-93ed-57379ab04681",
+					accountDestinationID: "3c096a40-ccba-4b58-93ed-57379ab04682",
+					amount:               1000,
+					createdAt:            time.Date(2023, 10, 10, 10, 0, 0, 0, time.UTC),
 				},
 			},
 			want: usecase.CreateTransferOutput{
@@ -142,18 +144,18 @@ func TestcreateTransferPresenterOutput(t *testing.T) {
 				AccountOriginID:      "3c096a40-ccba-4b58-93ed-57379ab04681",
 				AccountDestinationID: "3c096a40-ccba-4b58-93ed-57379ab04682",
 				Amount:               10.0,
-				CreatedAt:            "2023-10-01T00:00:00Z",
+				CreatedAt:            "2023-10-10T10:00:00Z",
 			},
 		},
 		{
-			name: "Transfer Output with Zero Amount",
+			name: "Handle Zero Amount in Transfer",
 			args: args{
 				transfer: domain.Transfer{
-					id:                   domain.TransferID("3c096a40-ccba-4b58-93ed-57379ab04680"),
-					accountOriginID:      domain.AccountID("3c096a40-ccba-4b58-93ed-57379ab04681"),
-					accountDestinationID: domain.AccountID("3c096a40-ccba-4b58-93ed-57379ab04682"),
-					amount:               domain.Money(0),
-					createdAt:            time.Date(2023, 10, 1, 0, 0, 0, 0, time.UTC),
+					ID:                   "3c096a40-ccba-4b58-93ed-57379ab04680",
+					accountOriginID:      "3c096a40-ccba-4b58-93ed-57379ab04681",
+					accountDestinationID: "3c096a40-ccba-4b58-93ed-57379ab04682",
+					amount:               0,
+					createdAt:            time.Date(2023, 10, 10, 10, 0, 0, 0, time.UTC),
 				},
 			},
 			want: usecase.CreateTransferOutput{
@@ -161,18 +163,18 @@ func TestcreateTransferPresenterOutput(t *testing.T) {
 				AccountOriginID:      "3c096a40-ccba-4b58-93ed-57379ab04681",
 				AccountDestinationID: "3c096a40-ccba-4b58-93ed-57379ab04682",
 				Amount:               0.0,
-				CreatedAt:            "2023-10-01T00:00:00Z",
+				CreatedAt:            "2023-10-10T10:00:00Z",
 			},
 		},
 		{
-			name: "Transfer Output with Future CreatedAt Date",
+			name: "Validate Handling of Future CreatedAt Date",
 			args: args{
 				transfer: domain.Transfer{
-					id:                   domain.TransferID("3c096a40-ccba-4b58-93ed-57379ab04680"),
-					accountOriginID:      domain.AccountID("3c096a40-ccba-4b58-93ed-57379ab04681"),
-					accountDestinationID: domain.AccountID("3c096a40-ccba-4b58-93ed-57379ab04682"),
-					amount:               domain.Money(1000),
-					createdAt:            time.Date(2025, 10, 1, 0, 0, 0, 0, time.UTC),
+					ID:                   "3c096a40-ccba-4b58-93ed-57379ab04680",
+					accountOriginID:      "3c096a40-ccba-4b58-93ed-57379ab04681",
+					accountDestinationID: "3c096a40-ccba-4b58-93ed-57379ab04682",
+					amount:               1000,
+					createdAt:            time.Date(2025, 10, 10, 10, 0, 0, 0, time.UTC),
 				},
 			},
 			want: usecase.CreateTransferOutput{
@@ -180,45 +182,45 @@ func TestcreateTransferPresenterOutput(t *testing.T) {
 				AccountOriginID:      "3c096a40-ccba-4b58-93ed-57379ab04681",
 				AccountDestinationID: "3c096a40-ccba-4b58-93ed-57379ab04682",
 				Amount:               10.0,
-				CreatedAt:            "2025-10-01T00:00:00Z",
+				CreatedAt:            "2025-10-10T10:00:00Z",
 			},
 		},
 		{
-			name: "Transfer Output with Invalid IDs",
+			name: "Test with Minimum and Maximum Transfer Amounts",
 			args: args{
 				transfer: domain.Transfer{
-					id:                   domain.TransferID("invalid-id"),
-					accountOriginID:      domain.AccountID("invalid-origin-id"),
-					accountDestinationID: domain.AccountID("invalid-destination-id"),
-					amount:               domain.Money(1000),
-					createdAt:            time.Date(2023, 10, 1, 0, 0, 0, 0, time.UTC),
+					ID:                   "3c096a40-ccba-4b58-93ed-57379ab04680",
+					accountOriginID:      "3c096a40-ccba-4b58-93ed-57379ab04681",
+					accountDestinationID: "3c096a40-ccba-4b58-93ed-57379ab04682",
+					amount:               -9223372036854775808, // Minimum int64 value
+					createdAt:            time.Date(2023, 10, 10, 10, 0, 0, 0, time.UTC),
+				},
+			},
+			want: usecase.CreateTransferOutput{
+				ID:                   "3c096a40-ccba-4b58-93ed-57379ab04680",
+				AccountOriginID:      "3c096a40-ccba-4b58-93ed-57379ab04681",
+				AccountDestinationID: "3c096a40-ccba-4b58-93ed-57379ab04682",
+				Amount:               -922337203685477.5808,
+				CreatedAt:            "2023-10-10T10:00:00Z",
+			},
+		},
+		{
+			name: "Ensure Correct Handling of Invalid Transfer IDs",
+			args: args{
+				transfer: domain.Transfer{
+					ID:                   "invalid-id",
+					accountOriginID:      "3c096a40-ccba-4b58-93ed-57379ab04681",
+					accountDestinationID: "3c096a40-ccba-4b58-93ed-57379ab04682",
+					amount:               1000,
+					createdAt:            time.Date(2023, 10, 10, 10, 0, 0, 0, time.UTC),
 				},
 			},
 			want: usecase.CreateTransferOutput{
 				ID:                   "invalid-id",
-				AccountOriginID:      "invalid-origin-id",
-				AccountDestinationID: "invalid-destination-id",
-				Amount:               10.0,
-				CreatedAt:            "2023-10-01T00:00:00Z",
-			},
-		},
-		{
-			name: "Transfer Output with Maximum Amount",
-			args: args{
-				transfer: domain.Transfer{
-					id:                   domain.TransferID("3c096a40-ccba-4b58-93ed-57379ab04680"),
-					accountOriginID:      domain.AccountID("3c096a40-ccba-4b58-93ed-57379ab04681"),
-					accountDestinationID: domain.AccountID("3c096a40-ccba-4b58-93ed-57379ab04682"),
-					amount:               domain.Money(^uint64(0) >> 1), // Max int64 value
-					createdAt:            time.Date(2023, 10, 1, 0, 0, 0, 0, time.UTC),
-				},
-			},
-			want: usecase.CreateTransferOutput{
-				ID:                   "3c096a40-ccba-4b58-93ed-57379ab04680",
 				AccountOriginID:      "3c096a40-ccba-4b58-93ed-57379ab04681",
 				AccountDestinationID: "3c096a40-ccba-4b58-93ed-57379ab04682",
-				Amount:               float64(^uint64(0)>>1) / 100,
-				CreatedAt:            "2023-10-01T00:00:00Z",
+				Amount:               10.0,
+				CreatedAt:            "2023-10-10T10:00:00Z",
 			},
 		},
 	}

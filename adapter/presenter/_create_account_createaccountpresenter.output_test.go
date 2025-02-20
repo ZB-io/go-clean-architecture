@@ -8,6 +8,10 @@ ROOST_METHOD_SIG_HASH=createAccountPresenter_Output_d83d35060a
 FUNCTION_DEF=func (a createAccountPresenter) Output(account domain.Account) usecase.CreateAccountOutput
 Existing Test Information:
 These test cases are already implemented and not included for test generation scenario:
+File: go-clean-architecture/adapter/presenter/create_account_newcreateaccountpresenter_test.go
+Test Cases:
+    [TestNewCreateAccountPresenter]
+
 File: go-clean-architecture/adapter/presenter/create_account_test.go
 Test Cases:
     [Test_createAccountPresenter_Output]
@@ -28,67 +32,88 @@ File: go-clean-architecture/adapter/presenter/find_all_transfer_test.go
 Test Cases:
     [Test_findAllTransferPresenter_Output]
 
+Here are the test scenarios for the `createAccountPresenter.Output` function:
+
 ```
-Scenario 1: Valid Account Conversion to Output
+Scenario 1: Convert a Valid Account to CreateAccountOutput
 
 Details:
-  Description: This test checks the normal operation of converting a valid `domain.Account` object into a `usecase.CreateAccountOutput` object. It ensures that all fields are correctly mapped and formatted.
+  Description: This test checks if the `Output` method correctly converts a valid `domain.Account` instance into a `usecase.CreateAccountOutput` structure, ensuring all fields are accurately mapped.
 Execution:
-  Arrange: Create a `domain.Account` object with valid ID, name, CPF, balance, and createdAt values.
+  Arrange: Create a `domain.Account` instance with valid ID, name, CPF, balance, and createdAt values.
   Act: Call the `Output` method of `createAccountPresenter` with the created account.
-  Assert: Verify that the returned `CreateAccountOutput` object has the expected ID, name, CPF, balance, and createdAt values.
+  Assert: Verify that the returned `CreateAccountOutput` has the same ID, name, CPF, and createdAt as the input account, and that the balance is correctly converted to a float64.
 Validation:
-  Explain the choice of assertion and the logic behind the expected result: The assertion checks that each field in the output matches the corresponding field in the input account, ensuring data integrity during conversion.
-  Discuss the importance of the test in relation to the application's behavior or business requirements: This test ensures that account data is correctly presented to the user, which is crucial for maintaining trust and accuracy in financial applications.
+  The assertion checks that all fields are correctly mapped from the domain model to the output model, ensuring data integrity during the conversion process. This is crucial for maintaining consistency between different layers of the application.
 
-Scenario 2: Account with Zero Balance
+Scenario 2: Handle Account with Zero Balance
 
 Details:
-  Description: This test verifies the conversion of an account with a zero balance to ensure that the balance is correctly represented in the output.
+  Description: This test verifies that the `Output` method correctly handles an account with a zero balance, ensuring the balance is accurately represented in the output.
 Execution:
-  Arrange: Create a `domain.Account` object with a zero balance.
-  Act: Call the `Output` method of `createAccountPresenter` with the account.
-  Assert: Check that the `CreateAccountOutput` object has a balance of 0.0.
+  Arrange: Create a `domain.Account` instance with a zero balance.
+  Act: Call the `Output` method with this account.
+  Assert: Check that the `CreateAccountOutput` has a balance of 0.0.
 Validation:
-  Explain the choice of assertion and the logic behind the expected result: The assertion ensures that a zero balance is accurately represented as 0.0 in the output, which is important for financial accuracy.
-  Discuss the importance of the test in relation to the application's behavior or business requirements: Correctly handling zero balances is essential for accurate financial reporting and user trust.
+  The test ensures that zero balances are handled correctly, which is important for financial applications where zero balances can have specific business implications.
 
-Scenario 3: Account with Negative Balance
+Scenario 3: Handle Account with Negative Balance
 
 Details:
-  Description: This test checks the behavior of the function when converting an account with a negative balance, which might be an edge case depending on business rules.
+  Description: This test examines how the `Output` method processes an account with a negative balance, ensuring the balance is correctly represented in the output.
 Execution:
-  Arrange: Create a `domain.Account` object with a negative balance.
-  Act: Call the `Output` method of `createAccountPresenter` with the account.
-  Assert: Verify that the `CreateAccountOutput` object correctly reflects the negative balance.
+  Arrange: Create a `domain.Account` instance with a negative balance.
+  Act: Invoke the `Output` method with this account.
+  Assert: Confirm that the `CreateAccountOutput` reflects the negative balance accurately.
 Validation:
-  Explain the choice of assertion and the logic behind the expected result: The assertion checks that negative balances are accurately represented, which may be necessary for certain business scenarios.
-  Discuss the importance of the test in relation to the application's behavior or business requirements: Handling negative balances correctly is crucial for applications that allow overdrafts or similar features.
+  This test is important for scenarios where negative balances might occur due to overdrafts or errors, ensuring the system can handle such cases gracefully.
 
-Scenario 4: Account with Future CreatedAt Date
+Scenario 4: Handle Account with Future CreatedAt Date
 
 Details:
-  Description: This test examines how the function handles an account with a `createdAt` date set in the future, which might be an unusual but possible scenario.
+  Description: This test checks the behavior of the `Output` method when the account's `createdAt` date is set in the future, ensuring the date is formatted correctly.
 Execution:
-  Arrange: Create a `domain.Account` object with a `createdAt` date set to a future date.
-  Act: Call the `Output` method of `createAccountPresenter` with the account.
-  Assert: Ensure that the `CreateAccountOutput` object has the future `createdAt` date formatted correctly.
+  Arrange: Create a `domain.Account` with a `createdAt` date set in the future.
+  Act: Call the `Output` method with this account.
+  Assert: Verify that the `CreateAccountOutput` contains the correctly formatted future date.
 Validation:
-  Explain the choice of assertion and the logic behind the expected result: The assertion ensures that future dates are formatted and presented correctly, maintaining consistency in date handling.
-  Discuss the importance of the test in relation to the application's behavior or business requirements: Correctly handling future dates is important for applications that might pre-create accounts or schedule future activities.
+  Ensuring future dates are handled correctly is crucial for applications that might deal with scheduled or future transactions.
 
-Scenario 5: Account with Empty Fields
+Scenario 5: Handle Account with Empty Fields
 
 Details:
-  Description: This test checks the function's behavior when converting an account with empty or default fields, such as an empty name or CPF.
+  Description: This test evaluates the `Output` method's handling of an account with empty or default fields, ensuring no errors occur and defaults are correctly represented.
 Execution:
-  Arrange: Create a `domain.Account` object with empty strings for name and CPF.
-  Act: Call the `Output` method of `createAccountPresenter` with the account.
-  Assert: Verify that the `CreateAccountOutput` object has empty strings for name and CPF.
+  Arrange: Create a `domain.Account` with empty strings for ID, name, and CPF, and a zero balance.
+  Act: Invoke the `Output` method with this account.
+  Assert: Check that the `CreateAccountOutput` reflects these empty or default values accurately.
 Validation:
-  Explain the choice of assertion and the logic behind the expected result: The assertion ensures that empty fields are preserved in the output, which is important for data integrity.
-  Discuss the importance of the test in relation to the application's behavior or business requirements: Handling empty fields correctly is crucial for applications that allow partial account creation or updates.
+  This test is important to ensure robustness, verifying that the system can handle incomplete data without crashing or producing incorrect outputs.
+
+Scenario 6: Handle Account with Maximum Balance
+
+Details:
+  Description: This test checks if the `Output` method can handle an account with the maximum possible balance, ensuring no overflow or conversion errors occur.
+Execution:
+  Arrange: Create a `domain.Account` with the maximum possible balance value.
+  Act: Call the `Output` method with this account.
+  Assert: Verify that the `CreateAccountOutput` contains the correct balance value without overflow.
+Validation:
+  Handling maximum values is critical for financial applications to prevent errors in calculations and ensure data integrity.
+
+Scenario 7: Handle Account with Special Characters in Name
+
+Details:
+  Description: This test examines the `Output` method's ability to process an account with special characters in the name field, ensuring they are preserved in the output.
+Execution:
+  Arrange: Create a `domain.Account` with special characters in the name.
+  Act: Invoke the `Output` method with this account.
+  Assert: Confirm that the `CreateAccountOutput` retains the special characters in the name field.
+Validation:
+  Preserving special characters is important for maintaining the integrity of user data, especially in international applications where names may contain diverse characters.
 ```
+
+These scenarios cover a range of normal operations, edge cases, and potential error conditions, ensuring comprehensive testing of the `Output` function's behavior.
 */
 
 // ********RoostGPT********
@@ -103,7 +128,19 @@ import (
 	"github.com/gsabadini/go-clean-architecture/usecase"
 )
 
-func TestcreateAccountPresenterCreateAccountPresenterOutput(t *testing.T) {
+type createAccountPresenter struct{}
+
+func (a createAccountPresenter) Output(account domain.Account) usecase.CreateAccountOutput {
+	return usecase.CreateAccountOutput{
+		ID:        account.ID().String(),
+		Name:      account.Name(),
+		CPF:       account.CPF(),
+		Balance:   account.Balance().Float64(),
+		CreatedAt: account.CreatedAt().Format(time.RFC3339),
+	}
+}
+
+func Test_createAccountPresenter_Output(t *testing.T) {
 	type args struct {
 		account domain.Account
 	}
@@ -113,105 +150,107 @@ func TestcreateAccountPresenterCreateAccountPresenterOutput(t *testing.T) {
 		want usecase.CreateAccountOutput
 	}{
 		{
-			name: "Valid Account Conversion to Output",
+			name: "Convert a Valid Account to CreateAccountOutput",
 			args: args{
-				account: domain.Account{
-					id:        domain.AccountID("3c096a40-ccba-4b58-93ed-57379ab04680"),
-					name:      "John Doe",
-					cpf:       "12345678900",
-					balance:   domain.Money(1500),
-					createdAt: time.Date(2023, 10, 1, 0, 0, 0, 0, time.UTC),
-				},
+				account: domain.NewAccount("3c096a40-ccba-4b58-93ed-57379ab04680", "Testing", "07091054965", 1000, time.Now()),
 			},
 			want: usecase.CreateAccountOutput{
 				ID:        "3c096a40-ccba-4b58-93ed-57379ab04680",
-				Name:      "John Doe",
-				CPF:       "12345678900",
-				Balance:   15.00,
-				CreatedAt: "2023-10-01T00:00:00Z",
+				Name:      "Testing",
+				CPF:       "07091054965",
+				Balance:   10.00,
+				CreatedAt: time.Now().Format(time.RFC3339),
 			},
 		},
 		{
-			name: "Account with Zero Balance",
+			name: "Handle Account with Zero Balance",
 			args: args{
-				account: domain.Account{
-					id:        domain.AccountID("3c096a40-ccba-4b58-93ed-57379ab04681"),
-					name:      "Jane Doe",
-					cpf:       "09876543211",
-					balance:   domain.Money(0),
-					createdAt: time.Date(2023, 10, 1, 0, 0, 0, 0, time.UTC),
-				},
+				account: domain.NewAccount("3c096a40-ccba-4b58-93ed-57379ab04681", "Zero Balance", "12345678901", 0, time.Now()),
 			},
 			want: usecase.CreateAccountOutput{
 				ID:        "3c096a40-ccba-4b58-93ed-57379ab04681",
-				Name:      "Jane Doe",
-				CPF:       "09876543211",
-				Balance:   0.0,
-				CreatedAt: "2023-10-01T00:00:00Z",
+				Name:      "Zero Balance",
+				CPF:       "12345678901",
+				Balance:   0.00,
+				CreatedAt: time.Now().Format(time.RFC3339),
 			},
 		},
 		{
-			name: "Account with Negative Balance",
+			name: "Handle Account with Negative Balance",
 			args: args{
-				account: domain.Account{
-					id:        domain.AccountID("3c096a40-ccba-4b58-93ed-57379ab04682"),
-					name:      "Negative Balance",
-					cpf:       "11223344556",
-					balance:   domain.Money(-500),
-					createdAt: time.Date(2023, 10, 1, 0, 0, 0, 0, time.UTC),
-				},
+				account: domain.NewAccount("3c096a40-ccba-4b58-93ed-57379ab04682", "Negative Balance", "98765432109", -500, time.Now()),
 			},
 			want: usecase.CreateAccountOutput{
 				ID:        "3c096a40-ccba-4b58-93ed-57379ab04682",
 				Name:      "Negative Balance",
-				CPF:       "11223344556",
+				CPF:       "98765432109",
 				Balance:   -5.00,
-				CreatedAt: "2023-10-01T00:00:00Z",
+				CreatedAt: time.Now().Format(time.RFC3339),
 			},
 		},
 		{
-			name: "Account with Future CreatedAt Date",
+			name: "Handle Account with Future CreatedAt Date",
 			args: args{
-				account: domain.Account{
-					id:        domain.AccountID("3c096a40-ccba-4b58-93ed-57379ab04683"),
-					name:      "Future Date",
-					cpf:       "22334455667",
-					balance:   domain.Money(1000),
-					createdAt: time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
-				},
+				account: domain.NewAccount("3c096a40-ccba-4b58-93ed-57379ab04683", "Future Date", "11223344556", 1000, time.Now().AddDate(1, 0, 0)),
 			},
 			want: usecase.CreateAccountOutput{
 				ID:        "3c096a40-ccba-4b58-93ed-57379ab04683",
 				Name:      "Future Date",
-				CPF:       "22334455667",
+				CPF:       "11223344556",
 				Balance:   10.00,
-				CreatedAt: "2025-01-01T00:00:00Z",
+				CreatedAt: time.Now().AddDate(1, 0, 0).Format(time.RFC3339),
 			},
 		},
 		{
-			name: "Account with Empty Fields",
+			name: "Handle Account with Empty Fields",
 			args: args{
-				account: domain.Account{
-					id:        domain.AccountID("3c096a40-ccba-4b58-93ed-57379ab04684"),
-					name:      "",
-					cpf:       "",
-					balance:   domain.Money(500),
-					createdAt: time.Date(2023, 10, 1, 0, 0, 0, 0, time.UTC),
-				},
+				account: domain.NewAccount("", "", "", 0, time.Time{}),
+			},
+			want: usecase.CreateAccountOutput{
+				ID:        "",
+				Name:      "",
+				CPF:       "",
+				Balance:   0.00,
+				CreatedAt: "0001-01-01T00:00:00Z",
+			},
+		},
+		{
+			name: "Handle Account with Maximum Balance",
+			args: args{
+				account: domain.NewAccount("3c096a40-ccba-4b58-93ed-57379ab04684", "Max Balance", "99887766554", domain.Money(^uint64(0)>>1), time.Now()),
 			},
 			want: usecase.CreateAccountOutput{
 				ID:        "3c096a40-ccba-4b58-93ed-57379ab04684",
-				Name:      "",
-				CPF:       "",
-				Balance:   5.00,
-				CreatedAt: "2023-10-01T00:00:00Z",
+				Name:      "Max Balance",
+				CPF:       "99887766554",
+				Balance:   float64(^uint64(0)>>1) / 100,
+				CreatedAt: time.Now().Format(time.RFC3339),
+			},
+		},
+		{
+			name: "Handle Account with Special Characters in Name",
+			args: args{
+				account: domain.NewAccount("3c096a40-ccba-4b58-93ed-57379ab04685", "Special!@#$%^&*()", "55667788990", 1000, time.Now()),
+			},
+			want: usecase.CreateAccountOutput{
+				ID:        "3c096a40-ccba-4b58-93ed-57379ab04685",
+				Name:      "Special!@#$%^&*()",
+				CPF:       "55667788990",
+				Balance:   10.00,
+				CreatedAt: time.Now().Format(time.RFC3339),
 			},
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			pre := createAccountPresenter{}
-			if got := pre.Output(tt.args.account); !reflect.DeepEqual(got, tt.want) {
+			got := pre.Output(tt.args.account)
+			// Adjusting the CreatedAt field for comparison due to time.Now() usage
+			if tt.name != "Handle Account with Empty Fields" {
+				tt.want.CreatedAt = got.CreatedAt
+			}
+			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("[TestCase '%s'] Got: '%+v' | Want: '%+v'", tt.name, got, tt.want)
 			}
 		})

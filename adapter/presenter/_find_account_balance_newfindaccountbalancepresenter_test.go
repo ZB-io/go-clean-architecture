@@ -77,10 +77,10 @@ import (
 	"github.com/gsabadini/go-clean-architecture/usecase"
 )
 
-// findAccountBalancePresenter implements the FindAccountBalancePresenter interface
+// Mock implementation of the findAccountBalancePresenter
 type findAccountBalancePresenter struct{}
 
-// Output method for findAccountBalancePresenter
+// Implementing the Output method for the findAccountBalancePresenter
 func (f findAccountBalancePresenter) Output(balance domain.Money) usecase.FindAccountBalanceOutput {
 	return usecase.FindAccountBalanceOutput{Balance: float64(balance) / 100}
 }

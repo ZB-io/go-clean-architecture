@@ -8,6 +8,10 @@ ROOST_METHOD_SIG_HASH=findAllAccountPresenter_Output_1f9cab4653
 FUNCTION_DEF=func (a findAllAccountPresenter) Output(accounts []domain.Account) []usecase.FindAllAccountOutput
 Existing Test Information:
 These test cases are already implemented and not included for test generation scenario:
+File: go-clean-architecture/adapter/presenter/create_account_newcreateaccountpresenter_test.go
+Test Cases:
+    [TestNewCreateAccountPresenter]
+
 File: go-clean-architecture/adapter/presenter/create_account_test.go
 Test Cases:
     [Test_createAccountPresenter_Output]
@@ -28,79 +32,83 @@ File: go-clean-architecture/adapter/presenter/find_all_transfer_test.go
 Test Cases:
     [Test_findAllTransferPresenter_Output]
 
+Here are the test scenarios for the `findAllAccountPresenter.Output` function:
+
 ```
 Scenario 1: Convert a Single Account to Output Format
 
 Details:
-  Description: This test checks the function's ability to convert a single `domain.Account` into the `usecase.FindAllAccountOutput` format.
+  Description: This test checks the conversion of a single `domain.Account` into the `usecase.FindAllAccountOutput` format, ensuring that all fields are correctly mapped and formatted.
 Execution:
-  Arrange: Create a single `domain.Account` with specific ID, name, CPF, balance, and creation date.
+  Arrange: Create a single `domain.Account` instance with known values for ID, name, CPF, balance, and creation date.
   Act: Call the `Output` method with the single account.
-  Assert: Verify that the returned slice contains exactly one `FindAllAccountOutput` with the expected values.
+  Assert: Verify that the returned `usecase.FindAllAccountOutput` has the expected values, including correct string formatting for ID and creation date.
 Validation:
-  Explain the choice of assertion and the logic behind the expected result: The assertion ensures that the function correctly maps each field from the `domain.Account` to the `FindAllAccountOutput` structure.
-  Discuss the importance of the test in relation to the application's behavior or business requirements: This test ensures that the function can handle the basic use case of converting a single account, which is fundamental to its operation.
+  Explain the choice of assertion and the logic behind the expected result.
+  Discuss the importance of the test in relation to the application's behavior or business requirements.
 
 Scenario 2: Convert Multiple Accounts to Output Format
 
 Details:
-  Description: This test verifies the function's ability to handle and convert multiple `domain.Account` instances into the `usecase.FindAllAccountOutput` format.
+  Description: This test verifies the conversion of multiple `domain.Account` instances into the `usecase.FindAllAccountOutput` format, ensuring that each account is processed correctly.
 Execution:
-  Arrange: Create a list of multiple `domain.Account` instances with varying data.
+  Arrange: Create multiple `domain.Account` instances with distinct values.
   Act: Call the `Output` method with the list of accounts.
-  Assert: Check that the returned slice contains `FindAllAccountOutput` entries corresponding to each input account, with correctly mapped fields.
+  Assert: Verify that the returned slice of `usecase.FindAllAccountOutput` contains entries for each account with correctly mapped and formatted fields.
 Validation:
-  Explain the choice of assertion and the logic behind the expected result: The assertion ensures that each account is independently and correctly converted, maintaining data integrity across multiple entries.
-  Discuss the importance of the test in relation to the application's behavior or business requirements: This test is crucial for ensuring that the function can handle typical use cases involving multiple accounts, which is common in real-world applications.
+  Explain the choice of assertion and the logic behind the expected result.
+  Discuss the importance of the test in relation to the application's behavior or business requirements.
 
 Scenario 3: Handle Empty Account List
 
 Details:
-  Description: This test checks the function's behavior when provided with an empty list of accounts.
+  Description: This test ensures that the function correctly handles an empty list of accounts, returning an empty slice of `usecase.FindAllAccountOutput`.
 Execution:
   Arrange: Prepare an empty slice of `domain.Account`.
   Act: Call the `Output` method with the empty slice.
-  Assert: Verify that the returned slice is also empty.
+  Assert: Verify that the returned slice is empty.
 Validation:
-  Explain the choice of assertion and the logic behind the expected result: The assertion confirms that the function correctly handles edge cases without errors or unexpected behavior.
-  Discuss the importance of the test in relation to the application's behavior or business requirements: Handling empty inputs gracefully is important for robustness and preventing runtime errors in edge cases.
+  Explain the choice of assertion and the logic behind the expected result.
+  Discuss the importance of the test in relation to the application's behavior or business requirements.
 
 Scenario 4: Handle Accounts with Zero Balance
 
 Details:
-  Description: This test examines the function's ability to correctly convert accounts with a zero balance.
+  Description: This test checks the conversion of accounts with a zero balance, ensuring that the balance is correctly represented as 0.00 in the output.
 Execution:
-  Arrange: Create a `domain.Account` with a balance of zero.
+  Arrange: Create a `domain.Account` instance with a zero balance.
   Act: Call the `Output` method with the account.
-  Assert: Ensure that the `Balance` field in the output is correctly set to 0.0.
+  Assert: Verify that the balance in the `usecase.FindAllAccountOutput` is 0.00.
 Validation:
-  Explain the choice of assertion and the logic behind the expected result: The assertion checks that the conversion logic correctly interprets and formats zero balances.
-  Discuss the importance of the test in relation to the application's behavior or business requirements: Correctly handling zero balances is important for financial applications to ensure accurate reporting and calculations.
+  Explain the choice of assertion and the logic behind the expected result.
+  Discuss the importance of the test in relation to the application's behavior or business requirements.
 
-Scenario 5: Handle Accounts with Large Balances
+Scenario 5: Handle Accounts with Negative Balance
 
 Details:
-  Description: This test verifies the function's ability to handle accounts with large balance values.
+  Description: This test ensures that accounts with a negative balance are correctly converted, with the balance represented as a negative float in the output.
 Execution:
-  Arrange: Create a `domain.Account` with a very large balance.
+  Arrange: Create a `domain.Account` instance with a negative balance.
   Act: Call the `Output` method with the account.
-  Assert: Confirm that the `Balance` field in the output accurately reflects the large balance.
+  Assert: Verify that the balance in the `usecase.FindAllAccountOutput` is negative and correctly formatted.
 Validation:
-  Explain the choice of assertion and the logic behind the expected result: The assertion ensures that the function can handle large numerical values without overflow or precision loss.
-  Discuss the importance of the test in relation to the application's behavior or business requirements: This test is important for applications dealing with financial data, where large balances are common and must be accurately represented.
+  Explain the choice of assertion and the logic behind the expected result.
+  Discuss the importance of the test in relation to the application's behavior or business requirements.
 
-Scenario 6: Handle Accounts with Special Characters in Name
+Scenario 6: Verify Date Formatting
 
 Details:
-  Description: This test checks the function's ability to handle account names containing special characters.
+  Description: This test checks that the `CreatedAt` field in the `domain.Account` is correctly formatted as a string in the RFC3339 format in the output.
 Execution:
-  Arrange: Create a `domain.Account` with a name that includes special characters.
+  Arrange: Create a `domain.Account` instance with a known creation date.
   Act: Call the `Output` method with the account.
-  Assert: Verify that the `Name` field in the output correctly includes the special characters.
+  Assert: Verify that the `CreatedAt` field in the `usecase.FindAllAccountOutput` matches the expected RFC3339 formatted string.
 Validation:
-  Explain the choice of assertion and the logic behind the expected result: The assertion confirms that the function does not alter or strip special characters from account names.
-  Discuss the importance of the test in relation to the application's behavior or business requirements: Handling special characters correctly is important for maintaining data integrity, especially in international applications where names may include a variety of characters.
+  Explain the choice of assertion and the logic behind the expected result.
+  Discuss the importance of the test in relation to the application's behavior or business requirements.
 ```
+
+These scenarios cover a range of cases, including normal operation, edge cases, and potential issues with data formatting. Each scenario is designed to ensure that the `Output` function behaves correctly under various conditions, maintaining the integrity and accuracy of the data transformation process.
 */
 
 // ********RoostGPT********
@@ -115,8 +123,10 @@ import (
 	"github.com/gsabadini/go-clean-architecture/usecase"
 )
 
+// Mocking the findAllAccountPresenter struct
 type findAllAccountPresenter struct{}
 
+// Output method for findAllAccountPresenter
 func (a findAllAccountPresenter) Output(accounts []domain.Account) []usecase.FindAllAccountOutput {
 	var o = make([]usecase.FindAllAccountOutput, 0)
 	for _, account := range accounts {
@@ -124,14 +134,14 @@ func (a findAllAccountPresenter) Output(accounts []domain.Account) []usecase.Fin
 			ID:        account.ID().String(),
 			Name:      account.Name(),
 			CPF:       account.CPF(),
-			Balance:   account.Balance().Float64(),
+			Balance:   account.Balance().Float64() / 100, // Assuming balance is stored as cents
 			CreatedAt: account.CreatedAt().Format(time.RFC3339),
 		})
 	}
 	return o
 }
 
-func Test_findAllAccountPresenter_Output(t *testing.T) {
+func TestfindAllAccountPresenterFindAllAccountPresenterOutput(t *testing.T) {
 	type args struct {
 		accounts []domain.Account
 	}
@@ -144,16 +154,16 @@ func Test_findAllAccountPresenter_Output(t *testing.T) {
 			name: "Convert a Single Account to Output Format",
 			args: args{
 				accounts: []domain.Account{
-					domain.NewAccount("3c096a40-ccba-4b58-93ed-57379ab04680", "SingleAccount", "07091054965", 1000, time.Time{}),
+					domain.NewAccount("3c096a40-ccba-4b58-93ed-57379ab04680", "John Doe", "12345678900", 1000, time.Date(2023, 10, 1, 0, 0, 0, 0, time.UTC)),
 				},
 			},
 			want: []usecase.FindAllAccountOutput{
 				{
 					ID:        "3c096a40-ccba-4b58-93ed-57379ab04680",
-					Name:      "SingleAccount",
-					CPF:       "07091054965",
-					Balance:   10.0,
-					CreatedAt: "0001-01-01T00:00:00Z",
+					Name:      "John Doe",
+					CPF:       "12345678900",
+					Balance:   10.00,
+					CreatedAt: "2023-10-01T00:00:00Z",
 				},
 			},
 		},
@@ -161,24 +171,24 @@ func Test_findAllAccountPresenter_Output(t *testing.T) {
 			name: "Convert Multiple Accounts to Output Format",
 			args: args{
 				accounts: []domain.Account{
-					domain.NewAccount("3c096a40-ccba-4b58-93ed-57379ab04680", "Account1", "07091054965", 1000, time.Time{}),
-					domain.NewAccount("3c096a40-ccba-4b58-93ed-57379ab04681", "Account2", "07091054966", 2000, time.Time{}),
+					domain.NewAccount("3c096a40-ccba-4b58-93ed-57379ab04680", "Alice", "12345678901", 2000, time.Date(2023, 10, 1, 0, 0, 0, 0, time.UTC)),
+					domain.NewAccount("3c096a40-ccba-4b58-93ed-57379ab04681", "Bob", "12345678902", 3000, time.Date(2023, 10, 2, 0, 0, 0, 0, time.UTC)),
 				},
 			},
 			want: []usecase.FindAllAccountOutput{
 				{
 					ID:        "3c096a40-ccba-4b58-93ed-57379ab04680",
-					Name:      "Account1",
-					CPF:       "07091054965",
-					Balance:   10.0,
-					CreatedAt: "0001-01-01T00:00:00Z",
+					Name:      "Alice",
+					CPF:       "12345678901",
+					Balance:   20.00,
+					CreatedAt: "2023-10-01T00:00:00Z",
 				},
 				{
 					ID:        "3c096a40-ccba-4b58-93ed-57379ab04681",
-					Name:      "Account2",
-					CPF:       "07091054966",
-					Balance:   20.0,
-					CreatedAt: "0001-01-01T00:00:00Z",
+					Name:      "Bob",
+					CPF:       "12345678902",
+					Balance:   30.00,
+					CreatedAt: "2023-10-02T00:00:00Z",
 				},
 			},
 		},
@@ -193,50 +203,50 @@ func Test_findAllAccountPresenter_Output(t *testing.T) {
 			name: "Handle Accounts with Zero Balance",
 			args: args{
 				accounts: []domain.Account{
-					domain.NewAccount("3c096a40-ccba-4b58-93ed-57379ab04680", "ZeroBalance", "07091054965", 0, time.Time{}),
+					domain.NewAccount("3c096a40-ccba-4b58-93ed-57379ab04682", "Charlie", "12345678903", 0, time.Date(2023, 10, 3, 0, 0, 0, 0, time.UTC)),
 				},
 			},
 			want: []usecase.FindAllAccountOutput{
 				{
-					ID:        "3c096a40-ccba-4b58-93ed-57379ab04680",
-					Name:      "ZeroBalance",
-					CPF:       "07091054965",
-					Balance:   0.0,
-					CreatedAt: "0001-01-01T00:00:00Z",
+					ID:        "3c096a40-ccba-4b58-93ed-57379ab04682",
+					Name:      "Charlie",
+					CPF:       "12345678903",
+					Balance:   0.00,
+					CreatedAt: "2023-10-03T00:00:00Z",
 				},
 			},
 		},
 		{
-			name: "Handle Accounts with Large Balances",
+			name: "Handle Accounts with Negative Balance",
 			args: args{
 				accounts: []domain.Account{
-					domain.NewAccount("3c096a40-ccba-4b58-93ed-57379ab04680", "LargeBalance", "07091054965", 1000000000, time.Time{}),
+					domain.NewAccount("3c096a40-ccba-4b58-93ed-57379ab04683", "Dave", "12345678904", -500, time.Date(2023, 10, 4, 0, 0, 0, 0, time.UTC)),
 				},
 			},
 			want: []usecase.FindAllAccountOutput{
 				{
-					ID:        "3c096a40-ccba-4b58-93ed-57379ab04680",
-					Name:      "LargeBalance",
-					CPF:       "07091054965",
-					Balance:   10000000.0,
-					CreatedAt: "0001-01-01T00:00:00Z",
+					ID:        "3c096a40-ccba-4b58-93ed-57379ab04683",
+					Name:      "Dave",
+					CPF:       "12345678904",
+					Balance:   -5.00,
+					CreatedAt: "2023-10-04T00:00:00Z",
 				},
 			},
 		},
 		{
-			name: "Handle Accounts with Special Characters in Name",
+			name: "Verify Date Formatting",
 			args: args{
 				accounts: []domain.Account{
-					domain.NewAccount("3c096a40-ccba-4b58-93ed-57379ab04680", "Special!@#$%^&*()_+", "07091054965", 1000, time.Time{}),
+					domain.NewAccount("3c096a40-ccba-4b58-93ed-57379ab04684", "Eve", "12345678905", 1500, time.Date(2023, 10, 5, 0, 0, 0, 0, time.UTC)),
 				},
 			},
 			want: []usecase.FindAllAccountOutput{
 				{
-					ID:        "3c096a40-ccba-4b58-93ed-57379ab04680",
-					Name:      "Special!@#$%^&*()_+",
-					CPF:       "07091054965",
-					Balance:   10.0,
-					CreatedAt: "0001-01-01T00:00:00Z",
+					ID:        "3c096a40-ccba-4b58-93ed-57379ab04684",
+					Name:      "Eve",
+					CPF:       "12345678905",
+					Balance:   15.00,
+					CreatedAt: "2023-10-05T00:00:00Z",
 				},
 			},
 		},

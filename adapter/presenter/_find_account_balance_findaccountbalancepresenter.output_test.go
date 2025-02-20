@@ -8,6 +8,10 @@ ROOST_METHOD_SIG_HASH=findAccountBalancePresenter_Output_7815e4b7d8
 FUNCTION_DEF=func (a findAccountBalancePresenter) Output(balance domain.Money) usecase.FindAccountBalanceOutput
 Existing Test Information:
 These test cases are already implemented and not included for test generation scenario:
+File: go-clean-architecture/adapter/presenter/create_account_newcreateaccountpresenter_test.go
+Test Cases:
+    [TestNewCreateAccountPresenter]
+
 File: go-clean-architecture/adapter/presenter/create_account_test.go
 Test Cases:
     [Test_createAccountPresenter_Output]
@@ -31,66 +35,63 @@ Test Cases:
 Here are the test scenarios for the `findAccountBalancePresenter.Output` function:
 
 ```
-Scenario 1: Convert a positive balance to float64
+Scenario 1: Convert Positive Money Value to Float64
 
 Details:
-  Description: This test checks if the function correctly converts a positive `domain.Money` balance to a `float64` in the `FindAccountBalanceOutput`.
+  Description: This test checks if the function correctly converts a positive `domain.Money` value to a `float64` representation in the `FindAccountBalanceOutput`.
 Execution:
-  Arrange: Create a `domain.Money` instance with a positive integer value.
-  Act: Call the `Output` method with the positive balance.
-  Assert: Verify that the returned `FindAccountBalanceOutput` has a `Balance` field equal to the expected float64 representation.
+  Arrange: Create a positive `domain.Money` value, e.g., 1500.
+  Act: Call the `Output` method with the positive money value.
+  Assert: Verify that the returned `FindAccountBalanceOutput` has a `Balance` of 15.00.
 Validation:
-  Explain the choice of assertion and the logic behind the expected result: The assertion checks that the conversion from `domain.Money` to `float64` is accurate, ensuring the application correctly handles positive balances.
-  Discuss the importance of the test in relation to the application's behavior or business requirements: Ensures that positive account balances are accurately represented in the output, which is crucial for financial calculations and reporting.
+  The assertion checks that the conversion from `domain.Money` to `float64` is accurate. This is crucial for ensuring that account balances are correctly represented in the application's output.
 
-Scenario 2: Convert a zero balance to float64
+Scenario 2: Convert Zero Money Value to Float64
 
 Details:
-  Description: This test verifies that the function correctly handles a zero balance, converting it to a `float64`.
+  Description: This test verifies that the function handles a zero `domain.Money` value correctly, converting it to a `float64` representation.
 Execution:
-  Arrange: Create a `domain.Money` instance with a value of zero.
-  Act: Call the `Output` method with the zero balance.
-  Assert: Verify that the returned `FindAccountBalanceOutput` has a `Balance` field equal to 0.0.
+  Arrange: Create a `domain.Money` value of 0.
+  Act: Call the `Output` method with the zero money value.
+  Assert: Verify that the returned `FindAccountBalanceOutput` has a `Balance` of 0.00.
 Validation:
-  Explain the choice of assertion and the logic behind the expected result: The assertion ensures that a zero balance is correctly represented as 0.0, maintaining consistency in balance representation.
-  Discuss the importance of the test in relation to the application's behavior or business requirements: Ensures that zero balances are accurately handled, which is important for accounts with no funds.
+  The assertion ensures that zero balances are accurately represented, which is important for displaying accounts with no funds.
 
-Scenario 3: Convert a negative balance to float64
+Scenario 3: Convert Negative Money Value to Float64
 
 Details:
-  Description: This test checks if the function correctly converts a negative `domain.Money` balance to a `float64` in the `FindAccountBalanceOutput`.
+  Description: This test checks if the function can handle negative `domain.Money` values, converting them to a `float64` representation.
 Execution:
-  Arrange: Create a `domain.Money` instance with a negative integer value.
-  Act: Call the `Output` method with the negative balance.
-  Assert: Verify that the returned `FindAccountBalanceOutput` has a `Balance` field equal to the expected negative float64 representation.
+  Arrange: Create a negative `domain.Money` value, e.g., -500.
+  Act: Call the `Output` method with the negative money value.
+  Assert: Verify that the returned `FindAccountBalanceOutput` has a `Balance` of -5.00.
 Validation:
-  Explain the choice of assertion and the logic behind the expected result: The assertion checks that negative balances are accurately converted, ensuring the application can handle overdrafts or debts.
-  Discuss the importance of the test in relation to the application's behavior or business requirements: Ensures that negative balances are accurately represented, which is crucial for financial integrity and reporting.
+  The assertion ensures that negative balances are correctly represented, which is important for applications that might handle overdrafts or debts.
 
-Scenario 4: Convert a large balance to float64
+Scenario 4: Large Money Value Conversion
 
 Details:
-  Description: This test verifies that the function can handle and correctly convert a large `domain.Money` balance to a `float64`.
+  Description: This test checks the function's ability to handle large `domain.Money` values and convert them to `float64`.
 Execution:
-  Arrange: Create a `domain.Money` instance with a large integer value.
-  Act: Call the `Output` method with the large balance.
-  Assert: Verify that the returned `FindAccountBalanceOutput` has a `Balance` field equal to the expected large float64 representation.
+  Arrange: Create a large `domain.Money` value, e.g., 100000000.
+  Act: Call the `Output` method with the large money value.
+  Assert: Verify that the returned `FindAccountBalanceOutput` has a `Balance` of 1000000.00.
 Validation:
-  Explain the choice of assertion and the logic behind the expected result: The assertion ensures that large balances are accurately converted, preventing overflow or precision errors.
-  Discuss the importance of the test in relation to the application's behavior or business requirements: Ensures that the application can handle large account balances, which is important for high-value accounts or transactions.
+  The assertion ensures that large balances are accurately represented, which is important for applications dealing with high-value accounts.
 
-Scenario 5: Convert a small fractional balance to float64
+Scenario 5: Small Fractional Money Value Conversion
 
 Details:
-  Description: This test checks if the function correctly converts a small fractional `domain.Money` balance to a `float64`.
+  Description: This test verifies the function's handling of small fractional `domain.Money` values.
 Execution:
-  Arrange: Create a `domain.Money` instance with a small fractional integer value.
-  Act: Call the `Output` method with the small fractional balance.
-  Assert: Verify that the returned `FindAccountBalanceOutput` has a `Balance` field equal to the expected small fractional float64 representation.
+  Arrange: Create a small fractional `domain.Money` value, e.g., 1.
+  Act: Call the `Output` method with the small fractional money value.
+  Assert: Verify that the returned `FindAccountBalanceOutput` has a `Balance` of 0.01.
 Validation:
-  Explain the choice of assertion and the logic behind the expected result: The assertion ensures that small fractional balances are accurately converted, maintaining precision for small transactions.
-  Discuss the importance of the test in relation to the application's behavior or business requirements: Ensures that small fractional balances are accurately represented, which is important for microtransactions or precise financial calculations.
+  The assertion ensures that small fractional balances are accurately represented, which is important for precision in financial applications.
 ```
+
+These scenarios cover a range of possible inputs to the `Output` function, ensuring that it behaves correctly across typical, edge, and extreme cases.
 */
 
 // ********RoostGPT********
@@ -104,45 +105,50 @@ import (
 	"github.com/gsabadini/go-clean-architecture/usecase"
 )
 
+// Mock implementation of findAccountBalancePresenter
 type findAccountBalancePresenter struct{}
 
+// Output method for findAccountBalancePresenter
 func (a findAccountBalancePresenter) Output(balance domain.Money) usecase.FindAccountBalanceOutput {
-	return usecase.FindAccountBalanceOutput{Balance: balance.Float64()}
+	return usecase.FindAccountBalanceOutput{Balance: float64(balance) / 100}
 }
 
 func TestfindAccountBalancePresenterFindAccountBalancePresenterOutput(t *testing.T) {
-	type args struct{ balance domain.Money }
+	type args struct {
+		balance domain.Money
+	}
 	tests := []struct {
 		name string
 		args args
 		want usecase.FindAccountBalanceOutput
 	}{
 		{
-			name: "Convert a positive balance to float64",
-			args: args{balance: 1099},
-			want: usecase.FindAccountBalanceOutput{Balance: 10.99},
+			name: "Convert Positive Money Value to Float64",
+			args: args{balance: 1500},
+			want: usecase.FindAccountBalanceOutput{Balance: 15.00},
 		},
 		{
-			name: "Convert a zero balance to float64",
+			name: "Convert Zero Money Value to Float64",
 			args: args{balance: 0},
-			want: usecase.FindAccountBalanceOutput{Balance: 0.0},
+			want: usecase.FindAccountBalanceOutput{Balance: 0.00},
 		},
 		{
-			name: "Convert a negative balance to float64",
-			args: args{balance: -1099},
-			want: usecase.FindAccountBalanceOutput{Balance: -10.99},
+			name: "Convert Negative Money Value to Float64",
+			args: args{balance: -500},
+			want: usecase.FindAccountBalanceOutput{Balance: -5.00},
 		},
 		{
-			name: "Convert a large balance to float64",
-			args: args{balance: 1000000000},
-			want: usecase.FindAccountBalanceOutput{Balance: 10000000.00},
+			name: "Large Money Value Conversion",
+			args: args{balance: 100000000},
+			want: usecase.FindAccountBalanceOutput{Balance: 1000000.00},
 		},
 		{
-			name: "Convert a small fractional balance to float64",
+			name: "Small Fractional Money Value Conversion",
 			args: args{balance: 1},
 			want: usecase.FindAccountBalanceOutput{Balance: 0.01},
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			pre := findAccountBalancePresenter{}
